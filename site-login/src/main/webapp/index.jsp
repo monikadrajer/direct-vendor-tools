@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>Direct Transport Standard Testing Services</title>
+<title>Developer Provided Testing Services</title>
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -235,7 +235,7 @@
 				<ul class="nav navbar-nav">
 				<li>
 						<a href="http://sitenv.org/" style="text-decoration: none;">Home</a></li>
-				 <li  id="interopLIId"><a href="javascript:setInteroperabilityServicesPage()" style="text-decoration: none;" >Direct Services</a></li>
+				<li  id="interopLIId"><a href="javascript:setInteroperabilityServicesPage()" style="text-decoration: none;" >Testing Services</a></li>
 				<li id="vendorRegLIId"><a href="javascript:setRegisterServicePage()" style="text-decoration: none;" >Developer Registration</a></li>
 					
 					
