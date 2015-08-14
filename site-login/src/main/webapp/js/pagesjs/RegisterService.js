@@ -5,6 +5,7 @@ function RegisterService()
 	this.allCerts = [];
 	this.editingSystemID = 0;
 	this.directEndPoint = "";
+	this.directTrustMember = "";
 	this.selectedFile = "";
 	this.UPLOAD_FILE = APP_CONTEXT + "uploadCert?directEndPoint=";
 	
@@ -35,6 +36,38 @@ function RegisterService()
 		callbackFunction.add(currentObject.registerServiceSuccessHandler);
 		var httpService = new HttpAjaxServices();
 		httpService.registerDirectSystem(currentObject.readValues(), callbackFunction, false,true);
+	};
+	
+	this.deleteService = function()
+	{
+		var callbackFunction = $.Callbacks('once');
+		callbackFunction.add(currentObject.deleteServiceSuccessHandler);
+		var httpService = new HttpAjaxServices();
+		var registerServiceTO = new RegisterServiceTO();
+		registerServiceTO.directEmailAddress = currentObject.directEndPoint;
+		registerServiceTO.id = currentObject.editingSystemID;
+		httpService.deleteDirectSystem(registerServiceTO, callbackFunction, false,false);
+	};
+	
+	this.onDeleteClick = function(object)
+	{
+		currentObject.directEndPoint = $(object).closest('tr').find('td:eq(2)').text();
+		$(currentObject.resultSet).each(function(){
+			if(this.directEmailAddress == currentObject.directEndPoint)
+			{
+				currentObject.editingSystemID = this.id;
+				return;
+			}});
+		$('#deleteDirectSystem').modal('show');
+	};
+	
+	this.deleteServiceSuccessHandler = function(successJson)
+	{
+		if(successJson)
+		{
+			registerService.readUserDirectSystems();
+			$('#deleteDirectSystem').modal('hide');
+		}
 	};
 	
 	this.readValues = function()
@@ -115,12 +148,12 @@ function RegisterService()
 	
 	this.checkNotes = function(notes)
 	{
-		if(typeof notes != 'undefined' && notes.length >=20)
+		if(notes != null && notes.length >=20)
 		{
 			return "<a href='#' onclick = registerService.openNotes(this)>" + notes.substring(0,19)+ "..</a>";
 		}else 
 		{
-		   return typeof notes != 'undefined'? notes : "";	
+		   return notes != null? notes : "";	
 		}
 	};
 	
@@ -142,6 +175,7 @@ function RegisterService()
 	this.onInteropAttachClick = function(object)
 	{
 		currentObject.directEndPoint = $(object).closest('tr').find('td:eq(2)').text();
+		currentObject.directTrustMember = $(object).closest('tr').find('td:eq(5)').text();
 		currentObject.readAllInteropCerts(currentObject.directEndPoint);
 	};
 	
@@ -165,7 +199,7 @@ function RegisterService()
 			+ "</tr>";
 		 });
 		 
-		 if(resultArray.length == 0)
+		 if(resultArray.length == 0 && currentObject.directTrustMember == "Yes")
 		 {
 			 $("#noCertsMessage").show();
 		 }
@@ -194,7 +228,9 @@ function RegisterService()
 		var rows = "";
 		 $(resultArray).each(function(){
 		   rows += 	"<tr><td><a href='#'  style='text-decoration: none;' onclick =registerService.onEditClick(this)> " +
-		   			"<span class='glyphicon glyphicon-edit'></span> <span hidden='true'>t</span></a>&nbsp;&nbsp;"+this.cehrtLabel+"</td>"
+  					"<span class='glyphicon glyphicon-edit'></span> <span hidden='true'>t</span></a>&nbsp;" +
+  					"<a href='#'  style='text-decoration: none;' onclick =registerService.onDeleteClick(this)> " +
+  					"<span class='glyphicon glyphicon-remove'></span> <span hidden='true'>t</span></a>&nbsp;"+this.cehrtLabel+"</td>"
 			+	"<td>"+this.organizationName+"</td>"
 			+	"<td>"+this.directEmailAddress+"</td>"
 			+	"<td>"+this.pocFirstName + " " + this.pocLastName + " (" +this.pointOfContact +")</td>"

@@ -2,9 +2,11 @@ package org.sitenv.directvendortools.web.services;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.sitenv.directvendortools.web.entities.DirectTransportTestingService;
 import org.sitenv.directvendortools.web.repositories.RegisterServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,14 +16,19 @@ public class DirectServicesService {
 
 	@Autowired
 	RegisterServiceRepository registerServiceRepository;
+	
+	private Sort directServiceOrderBy() {
+	    return new Sort("cehrtLabel");
+	}
 
 	public List<DirectTransportTestingService> findAllRegisteredServices() {
-		return registerServiceRepository.findAll();
+		return registerServiceRepository.findAll(directServiceOrderBy());
 	}
 
 	public DirectTransportTestingService save(DirectTransportTestingService service) {
 		service.setDirectEmailAddress(service.getDirectEmailAddress().toUpperCase());
 		service.setUserEmailAddress(service.getUserEmailAddress().toUpperCase());
+		service.setNotes(StringEscapeUtils.escapeHtml4(service.getNotes()));
 		return registerServiceRepository.save(service);
 	}
 	
@@ -46,6 +53,7 @@ public class DirectServicesService {
 		exisSer.setDirectTrustMembership(service.getDirectTrustMembership());
 		exisSer.setAvailFromDate(service.getAvailFromDate());
 		exisSer.setAvailToDate(service.getAvailToDate());
+		exisSer.setNotes(StringEscapeUtils.escapeHtml4(service.getNotes()));
 		return registerServiceRepository.save(exisSer);
 	}
 	
@@ -56,6 +64,6 @@ public class DirectServicesService {
 
 
 	public List<DirectTransportTestingService> findByEmailAddress(String emailAddress) {
-		return registerServiceRepository.findByUserEmailAddress(emailAddress);
+		return registerServiceRepository.findByUserEmailAddressOrderByCehrtLabel(emailAddress);
 	}
 }
