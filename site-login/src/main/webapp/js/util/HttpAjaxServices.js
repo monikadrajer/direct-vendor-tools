@@ -2,6 +2,7 @@ function HttpAjaxServices()
 {
 	var currentObject = this;
 	
+
 	this.REGISTER_ACCOUNT = APP_CONTEXT+"usersignup";
 	this.CHECK_EMAIL = APP_CONTEXT+"checkUserName?username=";
 	this.LOGIN_AUTH = APP_CONTEXT+"userlogin";
@@ -13,6 +14,8 @@ function HttpAjaxServices()
 	this.READ_ALL_CERTS = APP_CONTEXT + "readAllCerts?directEndPoint=";
 	this.DOWNLOAD_CERT = APP_CONTEXT+"downloadCert";
 	this.DELETE_CERT = APP_CONTEXT+"deleteCert?filePath=";
+	this.DOWNLOAD_TEST_INSTRUCTIONS = APP_CONTEXT+"";
+	this.DOWNLOAD_REG_INSTRUCTIONS = APP_CONTEXT+"";
 	
 	
 	this.checkUsername = function(username,callback,freezeScreen,screenFreezeMessage)
@@ -352,5 +355,15 @@ function HttpAjaxServices()
 	this.downloadFile = function(dataArray)
 	{
 		$.download(currentObject.DOWNLOAD_CERT,'GET',dataArray);
+	};
+	
+	this.downloadTestInstructions = function()
+	{
+		$.download(currentObject.DOWNLOAD_TEST_INSTRUCTIONS,'GET');
+	};
+	
+	this.downloadRegistrationInstructions = function()
+	{
+		$.download(currentObject.DOWNLOAD_REG_INSTRUCTIONS,'GET');
 	};
 }
