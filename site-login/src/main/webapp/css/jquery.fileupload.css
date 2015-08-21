@@ -79,7 +79,7 @@ html.no-js .start {
 }
 
 .start, .fileinput-button, .dropdown-toggle {
-	width: 180px;
+	/* width: 180px; */
 }
 
 .btn-success input {

@@ -4,6 +4,8 @@ function HttpAjaxServices()
 	
 
 	this.REGISTER_ACCOUNT = APP_CONTEXT+"usersignup";
+	this.EDIT_ACCOUNT = APP_CONTEXT+"edituserdetails";
+	this.CHANGE_PWD = APP_CONTEXT+"changepwd";
 	this.CHECK_EMAIL = APP_CONTEXT+"checkUserName?username=";
 	this.LOGIN_AUTH = APP_CONTEXT+"userlogin";
 	this.VALIDATE_DIRECT_SYS = APP_CONTEXT + "validatedirecttransporttestingservice?directEmailAddress=";
@@ -14,8 +16,8 @@ function HttpAjaxServices()
 	this.READ_ALL_CERTS = APP_CONTEXT + "readAllCerts?directEndPoint=";
 	this.DOWNLOAD_CERT = APP_CONTEXT+"downloadCert";
 	this.DELETE_CERT = APP_CONTEXT+"deleteCert?filePath=";
-	this.DOWNLOAD_TEST_INSTRUCTIONS = APP_CONTEXT+"";
-	this.DOWNLOAD_REG_INSTRUCTIONS = APP_CONTEXT+"";
+	this.DOWNLOAD_TEST_INSTRUCTIONS = APP_CONTEXT+"downloadTestInstructions";
+	this.DOWNLOAD_REG_INSTRUCTIONS = APP_CONTEXT+"downloadRegistrationInstructions";
 	
 	
 	this.checkUsername = function(username,callback,freezeScreen,screenFreezeMessage)
@@ -55,6 +57,62 @@ function HttpAjaxServices()
 			data:JSON.stringify(accountRegisterTO),
 			url: currentObject.REGISTER_ACCOUNT,
 			cache: false,
+			datatype : CONSTANTS.DATA_TYP_JSON,
+			contentType: CONSTANTS.CONTENT_TYP_JSON,
+			success:function (successJson, textStatus, oHTTP){
+				callback.fire(successJson); 
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown)
+			{
+				alert("Error Calling Service","Error");
+			}
+		});
+	};
+	
+	this.updateUserProfile = function(accountRegisterTO,callback,freezeScreen,screenFreezeMessage)
+	{
+		var utility = new Utility();
+		if(freezeScreen)
+		{
+			if(utility.isEmptyString(screenFreezeMessage))
+			   screenFreezeMessage =  "Processing. Please wait...";
+			   UTILITY.screenFreeze(screenFreezeMessage);
+		}
+		$.ajax({type:"PUT",
+			data:JSON.stringify(accountRegisterTO),
+			url: currentObject.EDIT_ACCOUNT,
+			cache: false,
+			beforeSend: function(xhr){
+		        xhr.setRequestHeader("X-Auth-Token", sessionStorage.authToken);
+		    },
+			datatype : CONSTANTS.DATA_TYP_JSON,
+			contentType: CONSTANTS.CONTENT_TYP_JSON,
+			success:function (successJson, textStatus, oHTTP){
+				callback.fire(successJson); 
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown)
+			{
+				alert("Error Calling Service","Error");
+			}
+		});
+	};
+	
+	this.changePassword = function(accountRegisterTO,callback,freezeScreen,screenFreezeMessage)
+	{
+		var utility = new Utility();
+		if(freezeScreen)
+		{
+			if(utility.isEmptyString(screenFreezeMessage))
+			   screenFreezeMessage =  "Processing. Please wait...";
+			   UTILITY.screenFreeze(screenFreezeMessage);
+		}
+		$.ajax({type:"PUT",
+			data:JSON.stringify(accountRegisterTO),
+			url: currentObject.CHANGE_PWD,
+			cache: false,
+			beforeSend: function(xhr){
+		        xhr.setRequestHeader("X-Auth-Token", sessionStorage.authToken);
+		    },
 			datatype : CONSTANTS.DATA_TYP_JSON,
 			contentType: CONSTANTS.CONTENT_TYP_JSON,
 			success:function (successJson, textStatus, oHTTP){

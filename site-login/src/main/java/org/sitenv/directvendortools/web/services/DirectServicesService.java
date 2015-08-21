@@ -28,7 +28,7 @@ public class DirectServicesService {
 	public DirectTransportTestingService save(DirectTransportTestingService service) {
 		service.setDirectEmailAddress(service.getDirectEmailAddress().toUpperCase());
 		service.setUserEmailAddress(service.getUserEmailAddress().toUpperCase());
-		service.setNotes(StringEscapeUtils.escapeHtml4(service.getNotes()));
+		htmlEncoding(service);
 		return registerServiceRepository.save(service);
 	}
 	
@@ -53,7 +53,8 @@ public class DirectServicesService {
 		exisSer.setDirectTrustMembership(service.getDirectTrustMembership());
 		exisSer.setAvailFromDate(service.getAvailFromDate());
 		exisSer.setAvailToDate(service.getAvailToDate());
-		exisSer.setNotes(StringEscapeUtils.escapeHtml4(service.getNotes()));
+		exisSer.setNotes(service.getNotes());
+		htmlEncoding(exisSer);
 		return registerServiceRepository.save(exisSer);
 	}
 	
@@ -65,5 +66,19 @@ public class DirectServicesService {
 
 	public List<DirectTransportTestingService> findByEmailAddress(String emailAddress) {
 		return registerServiceRepository.findByUserEmailAddressOrderByCehrtLabel(emailAddress);
+	}
+	
+	private static void htmlEncoding(final DirectTransportTestingService directTransportTestingService)
+	{
+		directTransportTestingService.setCehrtLabel(StringEscapeUtils.escapeHtml4(directTransportTestingService.getCehrtLabel()));
+		directTransportTestingService.setOrganizationName(StringEscapeUtils.escapeHtml4(directTransportTestingService.getOrganizationName()));
+		directTransportTestingService.setDirectEmailAddress(StringEscapeUtils.escapeHtml4(directTransportTestingService.getDirectEmailAddress()));
+		directTransportTestingService.setPointOfContact(StringEscapeUtils.escapeHtml4(directTransportTestingService.getPointOfContact()));
+		directTransportTestingService.setPocFirstName(StringEscapeUtils.escapeHtml4(directTransportTestingService.getPocFirstName()));
+		directTransportTestingService.setPocLastName(StringEscapeUtils.escapeHtml4(directTransportTestingService.getPocLastName()));
+		directTransportTestingService.setTimezone(StringEscapeUtils.escapeHtml4(directTransportTestingService.getTimezone()));
+		directTransportTestingService.setDirectTrustMembership(StringEscapeUtils.escapeHtml4(directTransportTestingService.getDirectTrustMembership()));
+		directTransportTestingService.setUserEmailAddress(StringEscapeUtils.escapeHtml4(directTransportTestingService.getUserEmailAddress()));
+		directTransportTestingService.setNotes(StringEscapeUtils.escapeHtml4(directTransportTestingService.getNotes()));
 	}
 }

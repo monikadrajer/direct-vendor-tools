@@ -85,7 +85,6 @@ function RegisterService()
 		registerServiceTO.availToDate =  $("#availToDate").val();
 		registerServiceTO.notes =  $("#notes").val();
 		registerServiceTO.id = currentObject.editingSystemID;
-		registerServiceTO.userEmailAddress = MODEL.userEmail;
 		return registerServiceTO;
 	};
 	
@@ -217,7 +216,7 @@ function RegisterService()
 		var callbackFunction = $.Callbacks('once');
 		callbackFunction.add(currentObject.readUserDirectSystemsSuccessHandler);
 		var httpService = new HttpAjaxServices();
-		httpService.readAllDirectSystem(callbackFunction, false,MODEL.userEmail);
+		httpService.readAllDirectSystem(callbackFunction, false,sessionStorage.userEmail);
 	};
 	
 	this.readUserDirectSystemsSuccessHandler = function(successJson)

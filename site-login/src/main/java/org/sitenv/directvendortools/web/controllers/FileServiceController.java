@@ -95,6 +95,65 @@ public class FileServiceController {
 		return certFile;
 	}
 	
+	@RequestMapping(value = ApplicationConstants.DOWNLOAD_TEST_INST, method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> downloadTestInstructions()
+	{
+		ResponseEntity<InputStreamResource> instructionFile = null;
+		try
+		{
+			ClassLoader classLoader = getClass().getClassLoader();
+			FileSystemResource file = new FileSystemResource(classLoader.getResource("docs/SITE_Direct_Test_Instructions.pdf").getFile());
+		
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+		    headers.add("Pragma", "no-cache");
+		    headers.add("Expires", "0");
+		    headers.add("Content-Disposition","attachment; filename=\""+ file.getFilename());
+		    
+		    return ResponseEntity
+		            .ok()
+		            .headers(headers)
+		            .contentLength(file.contentLength())
+		            .contentType(MediaType.parseMediaType(ApplicationConstants.MIME_DER))
+		            .body(new InputStreamResource(file.getInputStream()));
+			
+		}
+		catch (Exception exception)
+		{
+		}
+		return instructionFile;
+	}
+	
+	@RequestMapping(value = ApplicationConstants.DOWNLOAD_REG_INST, method = RequestMethod.GET)
+	public ResponseEntity<InputStreamResource> downloadRegistrationInstructions()
+	{
+		ResponseEntity<InputStreamResource>  RegInstructionFile = null;
+		
+		try
+		{
+			ClassLoader classLoader = getClass().getClassLoader();
+			FileSystemResource file = new FileSystemResource(classLoader.getResource("docs/SITE_Developer_Registration_Instructions.pdf").getFile());
+		
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+		    headers.add("Pragma", "no-cache");
+		    headers.add("Expires", "0");
+		    headers.add("Content-Disposition","attachment; filename=\""+ file.getFilename());
+		    
+		    return ResponseEntity
+		            .ok()
+		            .headers(headers)
+		            .contentLength(file.contentLength())
+		            .contentType(MediaType.parseMediaType(ApplicationConstants.MIME_DER))
+		            .body(new InputStreamResource(file.getInputStream()));
+			
+		}
+		catch (Exception exception)
+		{
+		}
+		return RegInstructionFile;
+	}
+	
 	@RequestMapping(value = ApplicationConstants.DELETE_CERT, method = RequestMethod.GET)
 	public ResponseTO deletCert(@RequestParam(value = "filePath", required = false) final String filePath)
 	{

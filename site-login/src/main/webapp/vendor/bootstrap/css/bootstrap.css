@@ -4127,7 +4127,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .nav .open > a,
 .nav .open > a:hover,
 .nav .open > a:focus {
-  background-color: #eeeeee;
+ /*  background-color: #eeeeee; */
   border-color: #428bca;
 }
 
@@ -4768,7 +4768,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
   color: #555555;
-  background-color: #e7e7e7;
+/*   background-color: #e7e7e7; */
 }
 
 @media (max-width: 767px) {

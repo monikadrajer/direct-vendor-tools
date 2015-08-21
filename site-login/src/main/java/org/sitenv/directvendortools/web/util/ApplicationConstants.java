@@ -10,6 +10,8 @@ public class ApplicationConstants {
 	public static final String READ_ALL_CERTS = "/readAllCerts";
 	public static final String DELETE_CERT = "/deleteCert";
 	public static final String DOWNLOAD_CERT = "/downloadCert";
+	public static final String DOWNLOAD_TEST_INST = "/downloadTestInstructions";
+	public static final String DOWNLOAD_REG_INST = "/downloadRegistrationInstructions";
 	
 	public static final String RESPONSE = "response";
 	public static final String ERROR = "error";
