@@ -78,13 +78,23 @@ public class DirectServicesController {
 		return userService.save(user);
 	}
 	
+	@RequestMapping(value = "/edituserdetails", method = RequestMethod.PUT)
+	public User editUser(@RequestBody User user) {
+		return userService.updateUser(user);
+	}
+	
+	@RequestMapping(value = "/changepwd", method = RequestMethod.PUT)
+	public boolean changePwd(@RequestBody User user) {
+		return userService.changePwd(user)!= null ? true : false;
+	}
+	
 	@RequestMapping(value = "/checkUserName", method = RequestMethod.GET)
 	public boolean checkUserName(@RequestParam(value = "username", required = false) String username) {
 		return userService.checkUserNameAvailability(username);
 	}
 	
 	@RequestMapping(value = "/userlogin", method = RequestMethod.POST)
-	public String login(@RequestBody User user) {
+	public User login(@RequestBody User user) {
 		
 		UsernamePasswordAuthenticationToken authenticationToken =
 				new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
@@ -96,8 +106,8 @@ public class DirectServicesController {
 		 * Reload user as password of authentication principal will be null after authorization and
 		 * password is needed for token generation
 		 */
-		UserDetails userDetails = this.userService.loadUserByUsername(user.getUsername());
-
-		return TokenUtils.createToken(userDetails);
+		User userDetails = this.userService.loadUserByUsername(user.getUsername());
+        userDetails.setAuthToken(TokenUtils.createToken(userDetails));
+		return userDetails;
 	}
 }

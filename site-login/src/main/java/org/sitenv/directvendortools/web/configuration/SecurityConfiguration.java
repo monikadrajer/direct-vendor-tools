@@ -54,6 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		 .antMatchers(HttpMethod.DELETE,"/deletedirecttransporttestingservice").hasRole("USER")
 		 .antMatchers(HttpMethod.POST,"/uploadCert").hasRole("USER")
 		 .antMatchers(HttpMethod.GET,"/deleteCert").hasRole("USER")
+		 .antMatchers(HttpMethod.PUT,"/edituserdetails").hasRole("USER")
 		 .anyRequest().permitAll();
 		
 		http.httpBasic().and().exceptionHandling()
