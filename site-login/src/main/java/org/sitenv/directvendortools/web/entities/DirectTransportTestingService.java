@@ -19,7 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class DirectTransportTestingService {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REGISTER_SEQ")
-	@SequenceGenerator(name = "REGISTER_SEQ", sequenceName = "register_service_id_seq")
+	@SequenceGenerator(name = "REGISTER_SEQ", sequenceName = "register_service_id_seq", allocationSize=1)
 	@Column(name = "id")
 	Long id;
 
