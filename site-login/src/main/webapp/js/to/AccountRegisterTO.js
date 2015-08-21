@@ -7,4 +7,5 @@ function AccountRegisterTO()
 	this.username;
 	this.password;
 	this.email;
+	this.id;
 }
