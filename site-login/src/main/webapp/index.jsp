@@ -69,15 +69,6 @@
   				return value != $( requirement ).val();
   			},32).addMessage('en','notequal','Direct Email Adress and Point Of Contact Email should not be same.');
   			
-  			window.ParsleyValidator.addValidator('pwdnotequal',function(value,requirement){
-  				return value != $( requirement ).val();
-  			},32).addMessage('en','pwdnotequal','New password and current password should not be same.');
-  			
-  			window.ParsleyValidator.addValidator('pwdpattern',function(value,requirement){
-  				var pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_\W]).+$/'; 
-  				return  pattern.test(value);
-  			},32).addMessage('en','pwdpattern','Password should be atleast 8 characters and must contain an Uppercase letter, Lowercase letter, digit and special character');
-  			
   			window.ParsleyValidator.addValidator('daterangeval',function(value,requirement){
   				var requirementVal = $( requirement ).val();
   				if(requirementVal !=null && requirementVal!='')
@@ -219,25 +210,7 @@
   			$("#logoutId").hide();
   			$("#rightNavbarID").show();
   			sessionStorage.userLoggedIn = 0;
-  			sessionStorage.userEmail = '';
-  			sessionStorage.userDetails = null;
   			setRegisterServicePage();
-  		}
-  		
-  		function openEditProfilePage(){
-  			$.get('pages/EditProfile.html',showEditProfilePage);
-  		}
-  		function showEditProfilePage(data){
-  			$("#editProfileModel").html(data);
-  			$("#editProfileModel").modal('show');
-  		}
-  		
-  		function openChangePwdPage(){
-  			$.get('pages/ChangePassword.html',showChangePwdPage);
-  		}
-  		function showChangePwdPage(data){
-  			$("#changePwdModel").html(data);
-  			$("#changePwdModel").modal('show');
   		}
  
 	</script>
@@ -275,13 +248,6 @@
 				</ul>
 				
 				<ul class="nav navbar-nav navbar-right" id="logoutId" hidden="true">
-					<li>
-          				<a href="#"  class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;">Actions <span class="caret"></span></a>
-          				<ul class="dropdown-menu">
-            				<li><a href="javascript:openEditProfilePage()" style="text-decoration: none;">Edit Profile</a></li>
-            				<li><a href="javascript:openChangePwdPage()" style="text-decoration: none;">Change Password</a></li>
-          				</ul>
-        			</li>
 					<li id="logoutLI"><a href="#" onclick="onlogout()" style="text-decoration: none;" >Logout</a></li>
 				</ul>
 			</div>
@@ -312,9 +278,5 @@
 	<div id="loginModel" class="modal fade" tabindex="-1"></div>
 	
 	<div id="signupModel" class="modal fade" tabindex="-1"></div>
-	
-	<div id="editProfileModel" class="modal fade" tabindex="-1"></div>
-	
-	<div id="changePwdModel" class="modal fade" tabindex="-1"></div>
 </body>
 </html>

@@ -51,12 +51,7 @@ function loginSuccessHandler(successJson)
    	 	$("#rightNavbarID").hide();
 		$("#logoutId").show();
 		sessionStorage.userLoggedIn = 1;
-		sessionStorage.authToken = successJson.authToken;
-		sessionStorage.username = successJson.username;
-		sessionStorage.companyName = successJson.companyName;
-		sessionStorage.firstName = successJson.firstName;
-		sessionStorage.lastName = successJson.lastName;
-		sessionStorage.id = successJson.id;
+		sessionStorage.authToken = successJson;
 		setRegisterServicePage();
     }else
     {
