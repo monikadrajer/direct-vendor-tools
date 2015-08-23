@@ -13,10 +13,6 @@ function AccountRegister()
 		httpService.checkUsername($("#emailAddress").val(), callbackFunction, false);
 	};
 	
-	this.htmlDecode = function(value)
-	{
-		return $('<div/>').html(value).text();
-	};
 	
 	this.checkUserNameSuccessHandler = function(successJson)
 	{
@@ -31,9 +27,9 @@ function AccountRegister()
 	
 	this.loadProfileDetails = function()
 	{
-		$("#company").val(currentObject.htmlDecode(sessionStorage.companyName));
-		$("#firstName").val(currentObject.htmlDecode(sessionStorage.firstName));
-		$("#lastName").val(currentObject.htmlDecode(sessionStorage.lastName)); 
+		$("#company").val(UTILITY.htmlDecode(sessionStorage.companyName));
+		$("#firstName").val(UTILITY.htmlDecode(sessionStorage.firstName));
+		$("#lastName").val(UTILITY.htmlDecode(sessionStorage.lastName)); 
 	};
 	
 	this.updateProfile = function()
@@ -55,9 +51,9 @@ function AccountRegister()
 		if(successJson != "")
 	    {
 			$('#editProfileAlert').show();
-			sessionStorage.companyName = successJson.companyName;
-			sessionStorage.firstName = successJson.firstName;
-			sessionStorage.lastName = successJson.lastName;
+			sessionStorage.companyName = UTILITY.htmlDecode(successJson.companyName);
+			sessionStorage.firstName = UTILITY.htmlDecode(successJson.firstName);
+			sessionStorage.lastName = UTILITY.htmlDecode(successJson.lastName);
 			$('#editProfReqID').hide();
 			$('#editProfileForm').hide();
 		}

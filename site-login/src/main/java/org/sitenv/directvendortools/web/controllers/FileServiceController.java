@@ -81,7 +81,7 @@ public class FileServiceController {
 		    headers.add("Expires", "0");
 		    headers.add("Content-Disposition","attachment; filename=\""+ file.getFilename());
 		    
-		    return ResponseEntity
+		    certFile = ResponseEntity
 		            .ok()
 		            .headers(headers)
 		            .contentLength(file.contentLength())
@@ -110,11 +110,11 @@ public class FileServiceController {
 		    headers.add("Expires", "0");
 		    headers.add("Content-Disposition","attachment; filename=\""+ file.getFilename());
 		    
-		    return ResponseEntity
+		    instructionFile= ResponseEntity
 		            .ok()
 		            .headers(headers)
 		            .contentLength(file.contentLength())
-		            .contentType(MediaType.parseMediaType(ApplicationConstants.MIME_DER))
+		            .contentType(MediaType.parseMediaType(ApplicationConstants.MIME_PDF))
 		            .body(new InputStreamResource(file.getInputStream()));
 			
 		}
@@ -127,7 +127,7 @@ public class FileServiceController {
 	@RequestMapping(value = ApplicationConstants.DOWNLOAD_REG_INST, method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> downloadRegistrationInstructions()
 	{
-		ResponseEntity<InputStreamResource>  RegInstructionFile = null;
+		ResponseEntity<InputStreamResource>  regInstructionFile = null;
 		
 		try
 		{
@@ -140,18 +140,18 @@ public class FileServiceController {
 		    headers.add("Expires", "0");
 		    headers.add("Content-Disposition","attachment; filename=\""+ file.getFilename());
 		    
-		    return ResponseEntity
+		    regInstructionFile= ResponseEntity
 		            .ok()
 		            .headers(headers)
 		            .contentLength(file.contentLength())
-		            .contentType(MediaType.parseMediaType(ApplicationConstants.MIME_DER))
+		            .contentType(MediaType.parseMediaType(ApplicationConstants.MIME_PDF))
 		            .body(new InputStreamResource(file.getInputStream()));
 			
 		}
 		catch (Exception exception)
 		{
 		}
-		return RegInstructionFile;
+		return regInstructionFile;
 	}
 	
 	@RequestMapping(value = ApplicationConstants.DELETE_CERT, method = RequestMethod.GET)

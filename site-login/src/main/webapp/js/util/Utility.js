@@ -18,6 +18,16 @@ function Utility()
 		return optionList;
 	};
 	
+	this.populateName = function(id)
+	{
+		$( "#"+id ).text("("+sessionStorage.firstName+ " " + sessionStorage.lastName + ")");
+	};
+	
+	
+	this.htmlDecode = function(value)
+	{
+		return $('<div/>').html(value).text();
+	};
 
 	this.getCheckBoxList = function (list,chkName,valueName,labelName)
 	{

@@ -20,5 +20,6 @@ public class ApplicationConstants {
 	public static final String RESULT_SET = "resultSet";
 	
 	public static final String MIME_DER ="application/x-x509-ca-cert";
+	public static final String MIME_PDF = "application/pdf";
 	
 }

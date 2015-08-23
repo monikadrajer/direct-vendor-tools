@@ -383,15 +383,15 @@ function RegisterService()
 		$(currentObject.resultSet).each(function(){
 			if(this.directEmailAddress == selectedDirectEmail)
 			{
-				$("#cehrtLabel").val(currentObject.htmlDecode(this.cehrtLabel));
+				$("#cehrtLabel").val(UTILITY.htmlDecode(this.cehrtLabel));
 				currentObject.editingSystemID = this.id;
-				$("#orgName").val(currentObject.htmlDecode(this.organizationName));
-				$("#directEmail").val(currentObject.htmlDecode(this.directEmailAddress));
+				$("#orgName").val(UTILITY.htmlDecode(this.organizationName));
+				$("#directEmail").val(UTILITY.htmlDecode(this.directEmailAddress));
 				$("#directEmail").attr("disabled", "disabled");
-				$("#pocEmail").val(currentObject.htmlDecode(this.pointOfContact));
-				$("#pocFirstName").val(currentObject.htmlDecode(this.pocFirstName));
-				$("#pocLastName").val(currentObject.htmlDecode(this.pocLastName));
-				var text = currentObject.htmlDecode(this.timezone);
+				$("#pocEmail").val(UTILITY.htmlDecode(this.pointOfContact));
+				$("#pocFirstName").val(UTILITY.htmlDecode(this.pocFirstName));
+				$("#pocLastName").val(UTILITY.htmlDecode(this.pocLastName));
+				var text = UTILITY.htmlDecode(this.timezone);
 				$('#timezone').val(text);
 				if(this.directTrustMembership == 'Yes')
 				{
@@ -400,19 +400,15 @@ function RegisterService()
 				{  
 					$("#option_no").attr('checked', 'checked');
 				}
-				$("#availFromDate").val(currentObject.htmlDecode(this.availFromDate));
-				$("#availToDate").val(currentObject.htmlDecode(this.availToDate));
-				$("#notes").val(currentObject.htmlDecode(this.notes));
+				$("#availFromDate").val(UTILITY.htmlDecode(this.availFromDate));
+				$("#availToDate").val(UTILITY.htmlDecode(this.availToDate));
+				$("#notes").val(UTILITY.htmlDecode(this.notes));
 				
 			   return;
 			}
 		});
 	};
 	
-	this.htmlDecode = function(value)
-	{
-		return $('<div/>').html(value).text();
-	};
 	
 	this.convertDateToLocal = function(date)
 	{

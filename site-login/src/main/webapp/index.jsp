@@ -142,6 +142,7 @@
   			{
   			   $("#logoutId").show();
   	  		   $("#rightNavbarID").hide();
+  	  		   UTILITY.populateName('nameId');
   			   if(sessionStorage.currentPage == 1)
   			   {
   				  setInteroperabilityServicesPage();
@@ -275,6 +276,7 @@
 				</ul>
 				
 				<ul class="nav navbar-nav navbar-right" id="logoutId" hidden="true">
+					<li><label id="nameId" style="padding-top: 15px;font-weight: normal;"></label></li>
 					<li>
           				<a href="#"  class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;">Actions <span class="caret"></span></a>
           				<ul class="dropdown-menu">
