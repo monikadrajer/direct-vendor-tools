@@ -58,7 +58,7 @@ function AccountRegister()
 			sessionStorage.companyName = successJson.companyName;
 			sessionStorage.firstName = successJson.firstName;
 			sessionStorage.lastName = successJson.lastName;
-			$('#fieldsRequireID').hide();
+			$('#editProfReqID').hide();
 			$('#editProfileForm').hide();
 		}
 	};
@@ -101,7 +101,7 @@ function AccountRegister()
 		if(successJson)
 	    {
 			$('#changePwdAlert').show();
-			$('#fieldsRequireID').hide();
+			$('#chgPwdReqID').hide();
 			$('#changePwdForm').hide();
 		}
 	};
