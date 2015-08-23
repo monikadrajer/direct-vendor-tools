@@ -81,7 +81,7 @@ public class FileServiceController {
 		    headers.add("Expires", "0");
 		    headers.add("Content-Disposition","attachment; filename=\""+ file.getFilename());
 		    
-		    return ResponseEntity
+		    certFile = ResponseEntity
 		            .ok()
 		            .headers(headers)
 		            .contentLength(file.contentLength())
@@ -110,16 +110,17 @@ public class FileServiceController {
 		    headers.add("Expires", "0");
 		    headers.add("Content-Disposition","attachment; filename=\""+ file.getFilename());
 		    
-		    return ResponseEntity
+		    instructionFile = ResponseEntity
 		            .ok()
 		            .headers(headers)
 		            .contentLength(file.contentLength())
-		            .contentType(MediaType.parseMediaType(ApplicationConstants.MIME_DER))
+		            .contentType(MediaType.parseMediaType(ApplicationConstants.MIME_PDF))
 		            .body(new InputStreamResource(file.getInputStream()));
 			
 		}
 		catch (Exception exception)
 		{
+			exception.printStackTrace();
 		}
 		return instructionFile;
 	}
@@ -140,16 +141,17 @@ public class FileServiceController {
 		    headers.add("Expires", "0");
 		    headers.add("Content-Disposition","attachment; filename=\""+ file.getFilename());
 		    
-		    return ResponseEntity
+		    RegInstructionFile = ResponseEntity
 		            .ok()
 		            .headers(headers)
 		            .contentLength(file.contentLength())
-		            .contentType(MediaType.parseMediaType(ApplicationConstants.MIME_DER))
+		            .contentType(MediaType.parseMediaType(ApplicationConstants.MIME_PDF))
 		            .body(new InputStreamResource(file.getInputStream()));
 			
 		}
 		catch (Exception exception)
 		{
+			exception.printStackTrace();
 		}
 		return RegInstructionFile;
 	}
