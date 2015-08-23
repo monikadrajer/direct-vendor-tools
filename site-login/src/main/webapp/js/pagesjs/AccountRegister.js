@@ -56,6 +56,7 @@ function AccountRegister()
 			sessionStorage.lastName = UTILITY.htmlDecode(successJson.lastName);
 			$('#editProfReqID').hide();
 			$('#editProfileForm').hide();
+			UTILITY.populateName('nameId');
 		}
 	};
 	
