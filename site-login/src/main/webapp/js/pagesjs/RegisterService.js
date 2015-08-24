@@ -51,13 +51,20 @@ function RegisterService()
 	
 	this.onDeleteClick = function(object)
 	{
+		var orgName = "";
 		currentObject.directEndPoint = $(object).closest('tr').find('td:eq(2)').text();
 		$(currentObject.resultSet).each(function(){
 			if(this.directEmailAddress == currentObject.directEndPoint)
 			{
 				currentObject.editingSystemID = this.id;
+				orgName = this.organizationName;
 				return;
 			}});
+		$('#updateSystemAlertID').hide();
+		$('#DirectSystemRegAlertID').hide();
+		$('#directEmailExistAlertID').hide();
+		$('#deleteHeaderID').html("Deleting Direct Service from " +orgName);
+		$('#confirmDelID').html("Are you sure you want to delete the Direct Server registered for endpoint "+currentObject.directEndPoint +" from SITE ");
 		$('#deleteDirectSystem').modal('show');
 	};
 	

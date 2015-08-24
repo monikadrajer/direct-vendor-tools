@@ -110,7 +110,7 @@ public class FileServiceController {
 		    headers.add("Expires", "0");
 		    headers.add("Content-Disposition","attachment; filename=\""+ file.getFilename());
 		    
-		    instructionFile = ResponseEntity
+		    instructionFile= ResponseEntity
 		            .ok()
 		            .headers(headers)
 		            .contentLength(file.contentLength())
@@ -120,7 +120,6 @@ public class FileServiceController {
 		}
 		catch (Exception exception)
 		{
-			exception.printStackTrace();
 		}
 		return instructionFile;
 	}
@@ -151,7 +150,6 @@ public class FileServiceController {
 		}
 		catch (Exception exception)
 		{
-			exception.printStackTrace();
 		}
 		return regInstructionFile;
 	}

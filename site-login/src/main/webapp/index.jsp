@@ -276,7 +276,7 @@
 				</ul>
 				
 				<ul class="nav navbar-nav navbar-right" id="logoutId" hidden="true">
-					<li><label id="nameId" style="padding-top: 15px;font-weight: normal;"></label></li>
+					<li><div id="nameId" style="padding-top: 15px;font-weight: normal;"></div></li>
 					<li>
           				<a href="#"  class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;">Actions <span class="caret"></span></a>
           				<ul class="dropdown-menu">
