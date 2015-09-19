@@ -23,11 +23,14 @@
 <link rel="stylesheet" href="css/custom.css" />
 <link rel="stylesheet" href="css/jquery.fileupload.css" />
 <link rel="stylesheet" href="css/parsley.css" />
+<link type="text/css" href="css/ui.jqgrid-bootstrap.css" rel="stylesheet" media="screen"/>
 
 <!-- <link rel="stylesheet" href="css/jquery.fileupload-noscript.css" /> -->
 
 <script type="text/javascript" src="vendor/jquery/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/jqGrid/i18n/grid.locale-en.js" type="text/javascript"></script>
+<script src="js/jqGrid/jquery.jqGrid.js" type="text/javascript"></script>
 <script src="js/json2.js" type="text/javascript"></script>
 <script src="js/jquery.dateFormat.js" type="text/javascript"></script>
 <script src="js/vendor/jquery.ui.widget.js"></script>
@@ -36,6 +39,7 @@
 <script src="js/jquery.filestyle.js" type="text/javascript"></script>
 <script src="js/parsley.js" type="text/javascript"></script>
 <script>
+	var APP_URL = window.location.protocol + "//"  + window.location.host + "" + window.location.pathname;
 	var APP_CONTEXT = "${pageContext.request.contextPath}/";
 </script>
 
@@ -54,8 +58,41 @@
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 <script>
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments);},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-40163006-1', 'sitenv.org');
+	  ga('send', 'pageview');
+
   
   		$(function(){
+  			
+  			var myParam = location.search.split('activateAccount=')[1];
+  			if(undefined != myParam)
+  			{
+  				var callbackFunction = $.Callbacks('once');
+  				callbackFunction.add(accountActivationSuccessHandler);
+  				var httpService = new HttpAjaxServices();
+  				httpService.activateAccount(myParam, callbackFunction, false);
+  				return;
+  			}
+  			
+  			$('#accountActivateModel').on('hidden.bs.modal', function () {
+  			  	sessionStorage.activateAccount = false;
+  			});
+  			
+  			if(sessionStorage.activateAccount)
+  			{
+  				if(sessionStorage.activateAccount == 'true')
+  	  			{
+  	  				$("#accountActivateModel").modal('show');	
+  	  				setRegisterServicePage();
+  	  			}	
+  			} 
+  				
   			
   			window.ParsleyValidator.addValidator('currentdateval',function(value,requirement){
   	    		var now = new Date((new Date()).setHours(0, 0, 0, 0));
@@ -74,8 +111,7 @@
   			},32).addMessage('en','pwdnotequal','New password and current password should not be same.');
   			
   			window.ParsleyValidator.addValidator('pwdpattern',function(value,requirement){
-  				var pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_\W]).+$/'; 
-  				return  pattern.test(value);
+  				return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_\W]).+$/.test(value);
   			},32).addMessage('en','pwdpattern','Password should be atleast 8 characters and must contain an Uppercase letter, Lowercase letter, digit and special character');
   			
   			window.ParsleyValidator.addValidator('daterangeval',function(value,requirement){
@@ -142,6 +178,7 @@
   			{
   			   $("#logoutId").show();
   	  		   $("#rightNavbarID").hide();
+  	  		   $("#resetPwdLIId").hide();
   	  		   UTILITY.populateName('nameId');
   			   if(sessionStorage.currentPage == 1)
   			   {
@@ -150,12 +187,32 @@
   				{
   				   setRegisterServicePage();
   				}
-  			}else 
-  		  	 setInteroperabilityServicesPage();
+  			}else if(sessionStorage.activateAccount)
+  			{
+  				if(sessionStorage.activateAccount == 'false')
+  	  			{
+  					setInteroperabilityServicesPage();
+  	  			}	
+  			}else
+  			{
+  				setInteroperabilityServicesPage();
+  			}
+  		  	 
+  			
   			$('#contactUs').click(function(){
   			    $(location).attr('href', 'mailto:admin@sitenv.org');
   			});
   		});
+  		
+  		
+  		function accountActivationSuccessHandler(successJson){
+  			if(successJson)
+  			{
+  				window.location.href = APP_CONTEXT;
+  				sessionStorage.activateAccount = true;
+  				return;
+  			}
+  		}
   		
   		function setRegisterServicePage(){
   			sessionStorage.currentPage = 2;
@@ -189,22 +246,14 @@
 			$("#mainPageContent").html(data);
   		}
   		
-  		function openLoginPage(){
-  			$.get('pages/LoginPage.html',showLoginPage);
+  		function openResetPasswordPage(){
+  			$.get('pages/ResetPassword.html',showResetPasswordPage);
   		}
-  		function showLoginPage(data){
-  			$("#loginModel").html(data);
-  			$("#loginModel").modal('show');
-  		}
+  		function showResetPasswordPage(data){
+  			$("#resetPwdModel").html(data);
+  			$("#resetPwdModel").modal('show');
+  		}  		
   		
-  		function openSignUpPage(){
-  			$.get('pages/AccountRegister.html',showLoginPage);
-  		}
-  		
-  		function showSignUpPage(data){
-  			$("#signupModel").html(data);
-  			$("#signupModel").modal('show');
-  		}
   		
   		function loadHeaderPage()
   		{
@@ -220,8 +269,12 @@
   			$("#logoutId").hide();
   			$("#rightNavbarID").show();
   			sessionStorage.userLoggedIn = 0;
-  			sessionStorage.userEmail = '';
-  			sessionStorage.userDetails = null;
+  			sessionStorage.authToken = '';
+  			sessionStorage.username = '';
+  			sessionStorage.companyName = '';
+  			sessionStorage.firstName = '';
+  			sessionStorage.lastName = '';
+  			$("#resetPwdLIId").show();
   			setRegisterServicePage();
   		}
   		
@@ -263,16 +316,17 @@
 				<ul class="nav navbar-nav">
 				<li>
 						<a href="http://sitenv.org/" style="text-decoration: none;">Home</a></li>
-				<li  id="interopLIId"><a href="javascript:setInteroperabilityServicesPage()" style="text-decoration: none;" >Testing Services</a></li>
+				<li id="interopLIId"><a href="javascript:setInteroperabilityServicesPage()" style="text-decoration: none;" >Testing Services</a></li>
 				<li id="vendorRegLIId"><a href="javascript:setRegisterServicePage()" style="text-decoration: none;" >Developer Registration</a></li>
+				<li id="resetPwdLIId"><a href="javascript:openResetPasswordPage()" style="text-decoration: none;" >Reset Password</a></li>
 					
 					
 					
 				</ul>
 				
 				<ul class="nav navbar-nav navbar-right" id="rightNavbarID">
-					<li id="signupID"><a href="javascript:openSignUpPage()" style="text-decoration: none;" >Sign Up </a></li>
-					<li id="loginID"><a href="javascript:openLoginPage()" style="text-decoration: none;" >Login</a></li>
+					<!-- <li id="signupID"><a href="javascript:openSignUpPage()" style="text-decoration: none;" >Sign Up </a></li>
+					<li id="loginID"><a href="javascript:openLoginPage()" style="text-decoration: none;" >Login</a></li> -->
 				</ul>
 				
 				<ul class="nav navbar-nav navbar-right" id="logoutId" hidden="true">
@@ -284,7 +338,7 @@
             				<li><a href="javascript:openChangePwdPage()" style="text-decoration: none;">Change Password</a></li>
           				</ul>
         			</li>
-					<li id="logoutLI"><a href="#" onclick="onlogout()" style="text-decoration: none;" >Logout</a></li>
+					<li id="logoutLI"><a href="javascript:onlogout()" style="text-decoration: none;" >Logout</a></li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
@@ -303,7 +357,7 @@
 					<p>
 						<a href="http://www.hhs.gov/Privacy.html" >Privacy
 							Policy</a> | <a href="http://www.hhs.gov/Disclaimer.html" 
-							>Disclaimer</a> | <a href="#" id="contactUs" 
+							>Disclaimer</a> | <a href="javascript:;" id="contactUs" 
 							>Contact US </a>
 					</p>
 				</div>
@@ -311,12 +365,31 @@
 		</div>
 	</footer>
 
-	<div id="loginModel" class="modal fade" tabindex="-1"></div>
-	
-	<div id="signupModel" class="modal fade" tabindex="-1"></div>
-	
 	<div id="editProfileModel" class="modal fade" tabindex="-1"></div>
 	
 	<div id="changePwdModel" class="modal fade" tabindex="-1"></div>
+	
+	<div id="resetPwdModel" class="modal fade" tabindex="-1"></div>
+	
+	<div id="accountActivateModel" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h2 class="modal-title">Account Activation</h2>
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-success alert-dismissible" role="alert"
+					 style="padding: 11px;" style="margin-bottom:30px;">
+					Your account has been activated successfully, please login by using Login button.
+				</div>		
+			</div>
+			<div class="modal-footer" style="margin-top: 0px;">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 </html>

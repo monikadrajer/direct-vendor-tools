@@ -22,6 +22,7 @@ function AccountRegister()
 		}else
 		{
 			$('#emailExistAlertID').show();
+			$("#submitBtn").text("Sign up");
 		}
 	};
 	
@@ -95,12 +96,48 @@ function AccountRegister()
 	
 	this.changePasswordSuccessHandler = function(successJson)
 	{
-		if(successJson)
-	    {
+		if(sessionStorage.userLoggedIn ==1){
 			$('#changePwdAlert').show();
 			$('#chgPwdReqID').hide();
 			$('#changePwdForm').hide();
+			sessionStorage.authToken = successJson.authToken;
+		}else
+		{
+			$('#changePwdModel').removeClass('fade');
+   	 		$('#changePwdModel').modal('hide');
+   	 		$("#rightNavbarID").hide();
+   	 		$("#resetPwdLIId").hide();
+			$("#logoutId").show();
+			sessionStorage.userLoggedIn = 1;
+			sessionStorage.authToken = successJson.authToken;
+			sessionStorage.username = successJson.username;
+			sessionStorage.companyName = UTILITY.htmlDecode(successJson.companyName);
+			sessionStorage.firstName = UTILITY.htmlDecode(successJson.firstName);
+			sessionStorage.lastName = UTILITY.htmlDecode(successJson.lastName);
+			UTILITY.populateName('nameId');
+			setRegisterServicePage();
 		}
+	};
+	
+	
+	this.resetPassword = function()
+	{
+		var callbackFunction = $.Callbacks('once');
+		callbackFunction.add(currentObject.resetPasswordSuccessHandler);
+		var httpService = new HttpAjaxServices();
+		httpService.resetPassword($("#resetPwdEmailID").val(),callbackFunction,false);
+	};
+	
+	this.resetPasswordSuccessHandler = function(successJson)
+	{
+		if(successJson)
+	    {
+			$('#passwordResetMsgId').show();
+			$('#pwdResetForm').hide();
+		}else
+		 {
+			$('#pwdResetErrorMsgId').show();
+		 }
 	};
 	
 	this.registerAccount = function()
@@ -112,6 +149,7 @@ function AccountRegister()
 		accountRegisterTO.lastName =  $("#lastName").val();
 		accountRegisterTO.password =  $("#password").val();
 		accountRegisterTO.username =  $("#emailAddress").val();
+		accountRegisterTO.url = APP_URL;
 		
 		var callbackFunction = $.Callbacks('once');
 		callbackFunction.add(currentObject.registerAccountSuccessHandler);
@@ -121,9 +159,12 @@ function AccountRegister()
 	
 	this.registerAccountSuccessHandler = function(successJson)
 	{
+		if(successJson)
+		{
 			$('#emailRegAlertID').show();
 			document.getElementById("signupForm").reset();
 			$('#fieldsRequireID').hide();
 			$('#signupForm').hide();
+		}
 	};
 }

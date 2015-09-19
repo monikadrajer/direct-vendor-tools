@@ -36,7 +36,7 @@ function userLogin()
 	var userLoginTO = new UserLoginTO();
 	userLoginTO.username =  $("#userName").val();
 	userLoginTO.password =  $("#password").val();
-	sessionStorage.userEmail = $("#userName").val();
+	sessionStorage.username = $("#userName").val();
 	var callbackFunction = $.Callbacks('once');
 	callbackFunction.add(loginSuccessHandler);
 	var httpService = new HttpAjaxServices();
@@ -47,17 +47,29 @@ function loginSuccessHandler(successJson)
 {
 	if(successJson != "")
     {
-   	 	$("#closeBtn").trigger("click");
-   	 	$("#rightNavbarID").hide();
-		$("#logoutId").show();
-		sessionStorage.userLoggedIn = 1;
-		sessionStorage.authToken = successJson.authToken;
-		sessionStorage.username = successJson.username;
-		sessionStorage.companyName = UTILITY.htmlDecode(successJson.companyName);
-		sessionStorage.firstName = UTILITY.htmlDecode(successJson.firstName);
-		sessionStorage.lastName = UTILITY.htmlDecode(successJson.lastName);
-		UTILITY.populateName('nameId');
-		setRegisterServicePage();
+   	 	if(successJson.tempPwd)
+   	 	{
+   	 		$('#loginModel').removeClass('fade');
+	 		$('#loginModel').modal('hide');
+   	 		openChangePwdPage();
+   	 	}
+   	 	else
+   	 	{
+   	 		$('#loginModel').removeClass('fade');
+   	 		$('#loginModel').modal('hide');
+   	 		$("#rightNavbarID").hide();
+   	 		$("#resetPwdLIId").hide();
+			$("#logoutId").show();
+			sessionStorage.userLoggedIn = 1;
+			sessionStorage.authToken = successJson.authToken;
+			sessionStorage.username = successJson.username;
+			sessionStorage.companyName = UTILITY.htmlDecode(successJson.companyName);
+			sessionStorage.firstName = UTILITY.htmlDecode(successJson.firstName);
+			sessionStorage.lastName = UTILITY.htmlDecode(successJson.lastName);
+			UTILITY.populateName('nameId');
+			setRegisterServicePage();
+   	 	}
+		
     }else
     {
     	$("#passwordErrorId").show();

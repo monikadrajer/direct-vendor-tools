@@ -8,4 +8,5 @@ function AccountRegisterTO()
 	this.password;
 	this.email;
 	this.id;
+	this.URL;
 }

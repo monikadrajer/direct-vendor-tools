@@ -74,8 +74,19 @@ public class DirectServicesController {
 	}
 
 	@RequestMapping(value = "/usersignup", method = RequestMethod.POST)
-	public User saveUser(@RequestBody User user) {
-		return userService.save(user);
+	public boolean saveUser(@RequestBody User user) {
+		try{
+			return userService.save(user);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	@RequestMapping(value = "/activateaccount", method = RequestMethod.GET)
+	public boolean activateAccount(@RequestParam(value = "username", required = false) String username) {
+		return userService.activateAccount(username)!= null ? true : false;
 	}
 	
 	@RequestMapping(value = "/edituserdetails", method = RequestMethod.PUT)
@@ -84,13 +95,30 @@ public class DirectServicesController {
 	}
 	
 	@RequestMapping(value = "/changepwd", method = RequestMethod.PUT)
-	public boolean changePwd(@RequestBody User user) {
-		return userService.changePwd(user)!= null ? true : false;
+	public User changePwd(@RequestBody User user) {
+		  userService.changePwd(user);
+		  User userDetails = this.userService.loadUserByUsername(user.getUsername());
+	      userDetails.setAuthToken(TokenUtils.createToken(userDetails));
+	      return userDetails;
 	}
 	
 	@RequestMapping(value = "/checkUserName", method = RequestMethod.GET)
 	public boolean checkUserName(@RequestParam(value = "username", required = false) String username) {
 		return userService.checkUserNameAvailability(username);
+	}
+	
+	@RequestMapping(value = "/resetpassword", method = RequestMethod.GET)
+	public boolean resetPassword(@RequestParam(value = "username", required = false) String username) {
+		
+		boolean passwordReset = false;
+		try{
+			passwordReset = userService.resetPassword(username);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		return passwordReset;
 	}
 	
 	@RequestMapping(value = "/userlogin", method = RequestMethod.POST)

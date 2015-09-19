@@ -26,6 +26,7 @@
 		document.getElementById("registerForm").reset();
 		$('#registerDiv').show();
 		$('#updateSystemAlertID').hide();
+		$('#deleteSystemAlertID').hide();
 		$('#DirectSystemRegAlertID').hide();
 		$('#directEmailExistAlertID').hide();
 		$("#registerForm").parsley().reset();
@@ -46,6 +47,14 @@
 	$(document).ready(function() {
 		$('.alert .close').click(function() {
 		    $(this).closest('.alert').hide();
+		});
+		
+		$('#userSignupBtn').click(function() {
+		    openSignUpPage();
+		});
+		
+		$('#userLoginBtn').click(function() {
+		    openLoginPage();
 		});
 		
 		$( "#availFromDate" ).change(function() {
@@ -73,11 +82,13 @@
 		if (sessionStorage.userLoggedIn == 1) {
 			$('#vendorReg').show();
 		    $('#directSysPanleId').show();
+		    $('#btnDivId').hide();
 			registerService.readUserDirectSystems();
 		} else {
 			$('#vendorReg').hide();
 		    $('#registrationModal').modal('hide');
 			$('#directSysPanleId').hide();
+			$('#btnDivId').show();
 		}
 		
 		$("#registerForm").parsley({
@@ -124,17 +135,36 @@
 			$("#anchoruploadform").parsley().validate();
 		});
 	});
+	
+	function openLoginPage(){
+		$.get('pages/LoginPage.html',showLoginPage);
+	}
+	function showLoginPage(data){
+		$("#loginModel").html(data);
+		$("#loginModel").modal('show');
+	}
+		
+	function openSignUpPage(){
+		$.get('pages/AccountRegister.html',showLoginPage);
+	}
+		
+	function showSignUpPage(data){
+		$("#signupModel").html(data);
+		$("#signupModel").modal('show');
+	}
 
 </script>
 </head>
 
 <div class="container" style="padding-top: 30px;">
+	
+	<div class="row pull-right" style="margin-right: 0px;" id="btnDivId">
+		<button onclick="return false;" class="btn btn-primary" id="userSignupBtn" style="margin-right: 5px;">Sign up</button>
+		<button onclick="return false;" class="btn btn-success" id="userLoginBtn">Login</button>
+	</div>
 	<div class="jumbotron">
 		<h1 style="text-align: center;"><b>Developer Registration</b></h1>
 		<hr>
-	
-	
-		
 	</div>
 	<div>
 			<p>Welcome to the Developer Registration page. This page offers health IT developers the ability to register their Direct services so that implementers (providers, hospitals, etc.) can find them and use them for interoperability testing. To see which health IT developer systems are available for interoperability testing, please click on the Direct Services tab. Developers that would like to share their Direct system should first create an account using the Sign Up link and then login to register their Direct service.</p>
@@ -146,7 +176,7 @@
 		</div>
 	<div id="vendorReg" hidden="true" class="text-center">
 		<br/>
-		<a href="#" onclick="showAggrementPage()" id="regLinkId" class="btn btn-primary">Register Your Direct Service</a>
+		<a href="javascript:showAggrementPage()" id="regLinkId" class="btn btn-primary">Register Your Direct Service</a>
 		<br/>
 				
 		<br/>
@@ -167,6 +197,15 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 				Direct System has been updated successfully.
+	</div>
+	
+	<div class="alert alert-success alert-dismissible" role="alert"
+				id="deleteSystemAlertID" style="padding: 11px;" hidden="true" style="margin-bottom:30px;">
+				<button type="button" class="close"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				Direct System has been deleted successfully.
 	</div>
 	
 	
@@ -619,6 +658,11 @@
 		</div>
 	</div>
 </div>
+
+<div id="loginModel" class="modal fade" tabindex="-1"></div>
+	
+	
+<div id="signupModel" class="modal fade" tabindex="-1"></div>
 	
 
 

@@ -22,4 +22,6 @@ public class ApplicationConstants {
 	public static final String MIME_DER ="application/x-x509-ca-cert";
 	public static final String MIME_PDF = "application/pdf";
 	
+	public static final String SUPPORT_EMAIL = "testingservices@sitenv.org";
+	
 }

@@ -63,6 +63,7 @@ function RegisterService()
 		$('#updateSystemAlertID').hide();
 		$('#DirectSystemRegAlertID').hide();
 		$('#directEmailExistAlertID').hide();
+		$('#deleteSystemAlertID').hide();
 		$('#deleteHeaderID').html("Deleting Direct Service from " +orgName);
 		$('#confirmDelID').html("Are you sure you want to delete the Direct Server registered for endpoint "+currentObject.directEndPoint +" from SITE ");
 		$('#deleteDirectSystem').modal('show');
@@ -74,6 +75,7 @@ function RegisterService()
 		{
 			registerService.readUserDirectSystems();
 			$('#deleteDirectSystem').modal('hide');
+			$('#deleteSystemAlertID').show();
 		}
 	};
 	
@@ -130,11 +132,68 @@ function RegisterService()
 		httpService.readAllDirectSystem(callbackFunction, false,"");
 	};
 	
+	this.changeTitle = function(cellVal, options, rowObject){
+		return  "&lt;div title='" + cellVal + "'>" + cellVal + "&lt;/div>";
+	};
+	
 	this.readAllDirectSystemsSuccessHandler = function(successJson)
 	{
 		var resultArray = successJson;
 		currentObject.resultSet = resultArray;
-		var rows = "";
+		var width = $(window).width(); 
+    	var gridWidth = width-UTILITY.setJqGridColumnWidth(width, 11);
+		$("#interopServiceResults").jqGrid({
+			datatype : 'local',
+			data : resultArray,
+			styleUI : 'Bootstrap',
+		    colNames:['Certified EHR Technology','Organization','Direct Endpoint','Point of Contact','Availability Dates','Direct Trust Member','Notes','Trust Anchor'],
+		    colModel :[ 
+				{name:'cehrtLabel', index:'cehrtLabel',align:'left',width:UTILITY.setJqGridColumnWidth(gridWidth, 14),title:false},
+				{name:'organizationName', index:'organizationName',align:'left',width:UTILITY.setJqGridColumnWidth(gridWidth, 12),title:false},				
+				{name:'directEmailAddress', index:'directEmailAddress',align:'left',width:UTILITY.setJqGridColumnWidth(gridWidth, 14),title:false},
+				{align:'left',width:UTILITY.setJqGridColumnWidth(gridWidth, 14),title:false,
+					formatter: function (cellvalue,options,rowObject) 
+					{
+			              return rowObject.pocFirstName + " " + rowObject.pocLastName + " (" +rowObject.pointOfContact +")";
+			          }},
+				{align:'left',width:UTILITY.setJqGridColumnWidth(gridWidth, 14),title:false,
+			        	  formatter: function (cellvalue,options,rowObject) {
+			        		  return rowObject.availFromDate + " to " +rowObject.availToDate;
+				          }},
+				{name:'directTrustMembership', index:'directTrustMembership',align:'center',width:UTILITY.setJqGridColumnWidth(gridWidth, 8),title:false},
+			    {name:'notes', index:'notes',align:'left',width:UTILITY.setJqGridColumnWidth(gridWidth, 14),title:false,
+			    	formatter: function (cellvalue,options,rowObject) 
+					{
+			              return currentObject.checkNotes(rowObject.notes);
+			         }},
+			    {align:'center',width:UTILITY.setJqGridColumnWidth(gridWidth, 7),title:false,
+		        	  formatter: function (cellvalue,options,rowObject) {
+		        		  return "<a href='#'  style='text-decoration: none;' onclick = 'registerService.onInteropAttachClick(this); return false;'> " +
+							"<span class='glyphicon glyphicon-paperclip'></span> <span hidden='true'>t</span></a>";
+			          }},
+		    ],
+			jsonReader: {cell:""},
+            rowNum: 5,
+		    viewrecords: true,
+		    loadonce: true,
+	        gridview: true,
+	        gridview: true,
+	        autowidth : false,
+	        shrinkToFit:true,
+	        pager:'#pager',
+	        height: "100%",
+	        loadComplete: function(){
+		    	$("#grdAdvancedSearchResults").setGridWidth(gridWidth);
+		    	var height = $(window).height();
+		    	$("#grdAdvancedSearchResults").setGridHeight(height-375);
+		    },
+		    caption: "Developer Provided Testing Services",
+		    beforeSelectRow : function(rowid , e){
+		    	return false;
+		    }
+		});
+		
+		/*var rows = "";
 		 $(resultArray).each(function(){
 		   rows += 	"<tr><td>"+this.cehrtLabel+"</td>"
 			+	"<td>"+this.organizationName+"</td>"
@@ -149,14 +208,14 @@ function RegisterService()
 			+ "</tr>";
 		 });
 		 
-		 $("#tableBody").append(rows);
+		 $("#tableBody").append(rows);*/
 	};
 	
 	this.checkNotes = function(notes)
 	{
 		if(notes != null && notes.length >=20)
 		{
-			return "<a href='#' onclick = registerService.openNotes(this)>" + notes.substring(0,19)+ "..</a>";
+			return "<a href='#' onclick = 'registerService.openNotes(this); return false;'>" + notes.substring(0,19)+ "..</a>";
 		}else 
 		{
 		   return notes != null? notes : "";	
@@ -200,7 +259,7 @@ function RegisterService()
 		currentObject.allCerts = resultArray;
 		var rows = "";
 		 $(resultArray).each(function(){
-		   rows += 	"<tr><td><a href='#'  style='text-decoration: none;' onclick = registerService.downloadFile(this) >" +this.certFile + "</a></td>"
+		   rows += 	"<tr><td><a href='#'  style='text-decoration: none;' onclick = 'registerService.downloadFile(this); return false;' >" +this.certFile + "</a></td>"
 		   +	"<td>"+currentObject.convertDateToLocal(this.uploadedTimeStamp) + "</td>"
 			+ "</tr>";
 		 });
@@ -223,7 +282,7 @@ function RegisterService()
 		var callbackFunction = $.Callbacks('once');
 		callbackFunction.add(currentObject.readUserDirectSystemsSuccessHandler);
 		var httpService = new HttpAjaxServices();
-		httpService.readAllDirectSystem(callbackFunction, false,sessionStorage.userEmail);
+		httpService.readAllDirectSystem(callbackFunction, false,sessionStorage.username);
 	};
 	
 	this.readUserDirectSystemsSuccessHandler = function(successJson)
@@ -233,9 +292,9 @@ function RegisterService()
 		currentObject.resultSet = resultArray;
 		var rows = "";
 		 $(resultArray).each(function(){
-		   rows += 	"<tr><td><a href='#'  style='text-decoration: none;' onclick =registerService.onEditClick(this)> " +
+		   rows += 	"<tr><td><a href='#'  style='text-decoration: none;' onclick ='registerService.onEditClick(this); return false'> " +
   					"<span class='glyphicon glyphicon-edit'></span> <span hidden='true'>t</span></a>&nbsp;" +
-  					"<a href='#'  style='text-decoration: none;' onclick =registerService.onDeleteClick(this)> " +
+  					"<a href='#'  style='text-decoration: none;' onclick ='registerService.onDeleteClick(this); return false;'> " +
   					"<span class='glyphicon glyphicon-remove'></span> <span hidden='true'>t</span></a>&nbsp;"+this.cehrtLabel+"</td>"
 			+	"<td>"+this.organizationName+"</td>"
 			+	"<td>"+this.directEmailAddress+"</td>"
@@ -243,7 +302,7 @@ function RegisterService()
 			+	"<td>"+this.availFromDate + " to " +this.availToDate +"</td>"
 			+	"<td style='text-align: center;'>"+this.directTrustMembership+"</td>"
 			+	"<td>"+currentObject.checkNotes(this.notes)+"</td>"
-			+   "<td style='text-align: center;'><a href='#'  style='text-decoration: none;' onclick = registerService.onAttachClick(this)> " +
+			+   "<td style='text-align: center;'><a href='#'  style='text-decoration: none;' onclick = 'registerService.onAttachClick(this); return false;'> " +
 					"<span class='glyphicon glyphicon-paperclip'></span><span hidden='true'>t</span></a></td>"
 			+ "</tr>";
 		 });
@@ -277,9 +336,9 @@ function RegisterService()
 		currentObject.allCerts = resultArray;
 		var rows = "";
 		 $(resultArray).each(function(){
-		   rows += 	"<tr><td><a href='#'  style='text-decoration: none;' onclick = registerService.downloadFile(this) >" +this.certFile + "</a></td>"
+		   rows += 	"<tr><td><a href='#'  style='text-decoration: none;' onclick = 'registerService.downloadFile(this);return false;' >" +this.certFile + "</a></td>"
 		   +	"<td>"+currentObject.convertDateToLocal(this.uploadedTimeStamp)+"</td>"
-			+   "<td><a href='#'  style='text-decoration: none;' onclick = registerService.deleteConfirm(this)> " +
+			+   "<td><a href='#'  style='text-decoration: none;' onclick = 'registerService.deleteConfirm(this); return false;'> " +
 					"<span class='glyphicon glyphicon-trash'></span><span hidden='true'>t</span></a></td>"
 			+ "</tr>";
 		 });

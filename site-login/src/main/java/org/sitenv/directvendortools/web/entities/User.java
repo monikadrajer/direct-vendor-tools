@@ -36,9 +36,33 @@ public class User implements UserDetails {
 	@Column(name = "password")
 	String password;
 	
+	@Column(name = "temppassword")
+	boolean isTempPwd;
+	
+	@Column(name = "enabled")
+	boolean isEnabled;
+	
 	@Transient
 	private String authToken;
 	
+	@Transient
+	private String url;
+	
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public boolean isTempPwd() {
+		return isTempPwd;
+	}
+
+	public void setTempPwd(boolean isTempPwd) {
+		this.isTempPwd = isTempPwd;
+	}
 
 	public String getAuthToken() {
 		return authToken;
@@ -54,7 +78,11 @@ public class User implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return isEnabled;
+	}
+	
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 
 	public String getCompanyName() {

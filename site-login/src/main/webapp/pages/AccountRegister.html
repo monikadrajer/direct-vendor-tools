@@ -27,6 +27,7 @@
 		$("#submitBtn").click(function(e) {
 			if($("#signupForm").parsley().validate()){
 				accountRegister.checkUserName();
+				 $("#submitBtn").html('<span class="glyphicon glyphicon-refresh spinning"></span> Processing...');
 			}
 		});
 	});
@@ -53,15 +54,12 @@
 
 			<div class="alert alert-success alert-dismissible" role="alert"
 				id="emailRegAlertID" style="padding: 11px;" hidden="true">
-				<button type="button" class="close" 
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				Email Registered Successfully!! Please log in by using Login button.
+				Email Registered Successfully.We have sent an activation link to your registered email, please activate your account by 
+				clicking on the activation link.
 			</div>
 			
 			<div id="fieldsRequireID" style="padding-bottom: 15px;">
-				<h4 style="text-align: center">* All fields are required</h4>
+				<h3 style="text-align: center">* All fields are required</h3>
 			</div>
 			
 			<form id="signupForm" method="post" class="form-horizontal">

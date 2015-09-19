@@ -1,11 +1,20 @@
 package org.sitenv.directvendortools.web.configuration;
 
+import java.util.Properties;
+
+import javax.mail.Session;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.sitenv.directvendortools.web.util.SaltedPasswordHashUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -17,7 +26,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 @Configuration
 @ComponentScan("org.sitenv.directvendortools.web")
-// @PropertySource(value = { "classpath:environment.properties" })
 public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
 	/*
@@ -47,6 +55,31 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new SaltedPasswordHashUtil();
+	}
+	
+	@Bean
+	public JavaMailSenderImpl mailSender() throws NamingException  {
+		Context initCtx = new InitialContext();
+		Context envCtx = (Context) initCtx.lookup("java:comp/env");
+		Session session = (Session) envCtx.lookup("mail/Session");
+		Properties props = session.getProperties();
+		JavaMailSenderImpl jmsi = new JavaMailSenderImpl();
+		jmsi.setSession(session);
+		jmsi.setUsername(props.getProperty("mail.user"));
+		jmsi.setPassword(props.getProperty("mail.password"));
+		jmsi.setProtocol(props.getProperty("mail.transport.protocol"));
+		jmsi.setHost(props.getProperty("mail.smtp.host"));
+		jmsi.setPort(Integer.parseInt(props.getProperty("mail.smtp.port")));
+		return jmsi;
+	}
+	
+	@Bean
+	public SimpleMailMessage preConfiguredMessage() throws NamingException  {
+		SimpleMailMessage preConfiguredMessage = new SimpleMailMessage();
+		preConfiguredMessage.setTo("muddana.rajesh@gmail.com");
+		preConfiguredMessage.setFrom("muddana.rajesh@gmail.com");
+		preConfiguredMessage.setSubject("Testing email");
+		return preConfiguredMessage;
 	}
 
 	@Override

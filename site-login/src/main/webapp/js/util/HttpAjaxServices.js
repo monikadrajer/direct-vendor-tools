@@ -4,10 +4,12 @@ function HttpAjaxServices()
 	
 
 	this.REGISTER_ACCOUNT = APP_CONTEXT+"usersignup";
+	this.ACTIVATE_ACCOUNT = APP_CONTEXT+"activateaccount?username=";
 	this.EDIT_ACCOUNT = APP_CONTEXT+"edituserdetails";
 	this.CHANGE_PWD = APP_CONTEXT+"changepwd";
 	this.CHECK_EMAIL = APP_CONTEXT+"checkUserName?username=";
 	this.LOGIN_AUTH = APP_CONTEXT+"userlogin";
+	this.RESET_PWD = APP_CONTEXT+"resetpassword?username=";
 	this.VALIDATE_DIRECT_SYS = APP_CONTEXT + "validatedirecttransporttestingservice?directEmailAddress=";
 	this.REGISTER_DIRECT_SYSTEM = APP_CONTEXT+"directtransporttestingservice";
 	this.UPDATE_DIRECT_SYSTEM = APP_CONTEXT+"updatedirecttransporttestingservice";
@@ -69,6 +71,31 @@ function HttpAjaxServices()
 		});
 	};
 	
+	
+	this.activateAccount = function(username,callback,freezeScreen,screenFreezeMessage)
+	{
+		var utility = new Utility();
+		if(freezeScreen)
+		{
+			if(utility.isEmptyString(screenFreezeMessage))
+			   screenFreezeMessage =  "Processing. Please wait...";
+			   UTILITY.screenFreeze(screenFreezeMessage);
+		}
+		$.ajax({type:"GET",
+			url: currentObject.ACTIVATE_ACCOUNT+username,
+			cache: false,
+			datatype : CONSTANTS.DATA_TYP_JSON,
+			contentType: CONSTANTS.CONTENT_TYP_JSON,
+			success:function (successJson, textStatus, oHTTP){
+				callback.fire(successJson); 
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown)
+			{
+				alert("Error Calling Service","Error");
+			}
+		});
+	};
+	
 	this.updateUserProfile = function(accountRegisterTO,callback,freezeScreen,screenFreezeMessage)
 	{
 		var utility = new Utility();
@@ -97,7 +124,7 @@ function HttpAjaxServices()
 		});
 	};
 	
-	this.changePassword = function(accountRegisterTO,callback,freezeScreen,screenFreezeMessage)
+	this.changePassword = function(userloginTO,callback,freezeScreen,screenFreezeMessage)
 	{
 		var utility = new Utility();
 		if(freezeScreen)
@@ -107,12 +134,9 @@ function HttpAjaxServices()
 			   UTILITY.screenFreeze(screenFreezeMessage);
 		}
 		$.ajax({type:"PUT",
-			data:JSON.stringify(accountRegisterTO),
+			data:JSON.stringify(userloginTO),
 			url: currentObject.CHANGE_PWD,
 			cache: false,
-			beforeSend: function(xhr){
-		        xhr.setRequestHeader("X-Auth-Token", sessionStorage.authToken);
-		    },
 			datatype : CONSTANTS.DATA_TYP_JSON,
 			contentType: CONSTANTS.CONTENT_TYP_JSON,
 			success:function (successJson, textStatus, oHTTP){
@@ -153,6 +177,30 @@ function HttpAjaxServices()
 					alert("Error Calling Service","Error");	
 				}
 				
+			}
+		});
+	};
+	
+	this.resetPassword = function(username,callback,freezeScreen,screenFreezeMessage)
+	{
+		var utility = new Utility();
+		if(freezeScreen)
+		{
+			if(utility.isEmptyString(screenFreezeMessage))
+			   screenFreezeMessage =  "Processing. Please wait...";
+			   UTILITY.screenFreeze(screenFreezeMessage);
+		}
+		$.ajax({type:"GET",
+			url: currentObject.RESET_PWD+username,
+			cache: false,
+			datatype : CONSTANTS.DATA_TYP_JSON,
+			contentType: CONSTANTS.CONTENT_TYP_JSON,
+			success:function (successJson, textStatus, oHTTP){
+				callback.fire(successJson); 
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown)
+			{
+				alert("Error Calling Service","Error");
 			}
 		});
 	};
