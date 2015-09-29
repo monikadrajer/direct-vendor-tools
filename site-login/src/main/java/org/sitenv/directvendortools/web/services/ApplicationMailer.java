@@ -8,7 +8,6 @@ import javax.mail.internet.MimeMessage;
 
 import org.sitenv.directvendortools.web.util.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +17,6 @@ public class ApplicationMailer
     @Autowired
     private JavaMailSenderImpl mailSender;
      
-    @Autowired
-    private SimpleMailMessage preConfiguredMessage;
-    
-    
     private String subject = "Pasword reset information for Direct Vendor Tools";
     
     
@@ -62,15 +57,4 @@ public class ApplicationMailer
 		return true;
     }
  
- 
-    /**
-     * This method will send a pre-configured message
-     * */
-    public boolean sendPreConfiguredMail(String message)
-    {
-        SimpleMailMessage mailMessage = new SimpleMailMessage(preConfiguredMessage);
-        mailMessage.setText(message);
-        mailSender.send(mailMessage);
-        return true;
-    }
 }

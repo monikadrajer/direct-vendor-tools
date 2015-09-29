@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.sitenv.directvendortools.web.entities.CertAnchor;
@@ -66,6 +67,7 @@ public class FileProcessService {
 				certAnchor.setUploadedTimeStamp(uploadedTimestamp);
 				allCerts.add(certAnchor);
 			}
+			Collections.sort(allCerts);
 			resultSet.getResults().addAll(allCerts);
 		}
 		return resultSet;

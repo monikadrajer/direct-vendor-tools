@@ -146,7 +146,7 @@ function RegisterService()
 			datatype : 'local',
 			data : resultArray,
 			styleUI : 'Bootstrap',
-		    colNames:['Certified EHR Technology','Organization','Direct Endpoint','Point of Contact','Availability Dates','Direct Trust Member','Notes','Trust Anchor'],
+		    colNames:['Certified EHR Technology','Organization Name','Direct Email Address','Point of Contact','Availability Dates','Direct Trust Member','Notes','Trust Anchor'],
 		    colModel :[ 
 				{name:'cehrtLabel', index:'cehrtLabel',align:'left',width:UTILITY.setJqGridColumnWidth(gridWidth, 14),title:false},
 				{name:'organizationName', index:'organizationName',align:'left',width:UTILITY.setJqGridColumnWidth(gridWidth, 12),title:false},				

@@ -13,7 +13,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartResolver;
@@ -73,15 +72,6 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 		return jmsi;
 	}
 	
-	@Bean
-	public SimpleMailMessage preConfiguredMessage() throws NamingException  {
-		SimpleMailMessage preConfiguredMessage = new SimpleMailMessage();
-		preConfiguredMessage.setTo("muddana.rajesh@gmail.com");
-		preConfiguredMessage.setFrom("muddana.rajesh@gmail.com");
-		preConfiguredMessage.setSubject("Testing email");
-		return preConfiguredMessage;
-	}
-
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/css/**").addResourceLocations("/css/");

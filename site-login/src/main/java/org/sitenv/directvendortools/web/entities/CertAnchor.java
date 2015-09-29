@@ -1,7 +1,7 @@
 package org.sitenv.directvendortools.web.entities;
 
 
-public class CertAnchor {
+public class CertAnchor implements Comparable<CertAnchor> {
 	
 	private String certFile;
 	private String uploadedTimeStamp;
@@ -24,5 +24,10 @@ public class CertAnchor {
 	}
 	public void setAbsolutePath(String absolutePath) {
 		this.absolutePath = absolutePath;
+	}
+	
+	@Override
+	public int compareTo(CertAnchor certAnchor) {
+		return this.certFile.compareTo(certAnchor.certFile);
 	}
 }
