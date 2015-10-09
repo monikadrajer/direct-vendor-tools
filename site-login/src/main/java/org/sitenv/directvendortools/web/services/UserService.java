@@ -1,5 +1,8 @@
 package org.sitenv.directvendortools.web.services;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
@@ -7,6 +10,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.sitenv.directvendortools.web.entities.User;
 import org.sitenv.directvendortools.web.repositories.UserRepository;
+import org.sitenv.directvendortools.web.util.ApplicationConstants;
+import org.sitenv.directvendortools.web.util.ApplicationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,16 +35,34 @@ public class UserService implements UserDetailsService {
 		user.setPassword(encodedPassword);
 		user.setUsername(user.getUsername().toUpperCase());
 		user.setEnabled(false);
+		user.setPasswordLastupdateTimestamp(new Timestamp(new Date().getTime()));
 		htmlEncoding(user);
 		userRepository.save(user);
 		String activationLink = user.getUrl() + "?activateAccount=" + user.getUsername();
 		return applicationMailer.accountActivationMail(user.getUsername(),activationLink);
 	}
 	
-	public User activateAccount(String userName){
+	public boolean activateAccount(String userName){
 		User exisUser = userRepository.findByUsername(userName.toUpperCase());
-		exisUser.setEnabled(true);
-		return userRepository.save(exisUser);
+		if(exisUser != null && exisUser.isEnabled())
+		{
+			return true;
+		}
+		else if(exisUser != null && ApplicationUtil.getTimestampDifference(exisUser.getCreateTimestamp()) < ApplicationConstants.ACTIVATION_EXPIRY_TIME)
+		{
+			exisUser.setEnabled(true);
+			userRepository.save(exisUser);
+			return true;
+		}else if(exisUser != null && ApplicationUtil.getTimestampDifference(exisUser.getCreateTimestamp()) > ApplicationConstants.ACTIVATION_EXPIRY_TIME)
+		{
+			userRepository.delete(exisUser);
+			return false;
+		}else if(exisUser == null)
+		{
+			return false;
+		}else
+			return false;
+		
 	}
 	
 	
@@ -56,6 +79,7 @@ public class UserService implements UserDetailsService {
 		User exisUser = userRepository.findByUsername(user.getUsername().toUpperCase());
 		exisUser.setPassword(passwordEncoder.encode(user.getPassword()));
 		exisUser.setTempPwd(false);
+		exisUser.setPasswordLastupdateTimestamp(new Timestamp(new Date().getTime()));
 		return userRepository.save(exisUser);
 	}
 	

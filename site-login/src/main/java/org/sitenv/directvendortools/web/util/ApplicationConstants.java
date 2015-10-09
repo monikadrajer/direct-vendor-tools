@@ -23,5 +23,9 @@ public class ApplicationConstants {
 	public static final String MIME_PDF = "application/pdf";
 	
 	public static final String SUPPORT_EMAIL = "testingservices@sitenv.org";
+	public static final long ONE_HOUR_TIME = (1000*60*60);
+	public static final long ONE_DAY_TIME = (1000*60*60*24);
+	public static final long ACTIVATION_EXPIRY_TIME = 23;
+	public static final long PASSWORD_RXPIRY_DAYS = 30;
 	
 }

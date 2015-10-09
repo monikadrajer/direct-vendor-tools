@@ -1,5 +1,6 @@
 package org.sitenv.directvendortools.web.entities;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -42,11 +43,20 @@ public class User implements UserDetails {
 	@Column(name = "enabled")
 	boolean isEnabled;
 	
+	@Column(name = "createtimestamp", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	Timestamp createTimestamp;
+	
 	@Transient
 	private String authToken;
 	
 	@Transient
 	private String url;
+	
+	@Column(name="pwdlastupdtimestamp")
+	private Timestamp passwordLastupdateTimestamp;
+	
+	@Transient
+	private int passwordExpiryDays;
 	
 	public String getUrl() {
 		return url;
@@ -143,4 +153,45 @@ public class User implements UserDetails {
 		return true;
 	}
 
+	/**
+	 * @return the createTimestamp
+	 */
+	public Timestamp getCreateTimestamp() {
+		return createTimestamp;
+	}
+
+	/**
+	 * @param createTimestamp the createTimestamp to set
+	 */
+	public void setCreateTimestamp(Timestamp createTimestamp) {
+		this.createTimestamp = createTimestamp;
+	}
+
+	/**
+	 * @return the passwordLastupdateTimestamp
+	 */
+	public Timestamp getPasswordLastupdateTimestamp() {
+		return passwordLastupdateTimestamp;
+	}
+
+	/**
+	 * @param passwordLastupdateTimestamp the passwordLastupdateTimestamp to set
+	 */
+	public void setPasswordLastupdateTimestamp(Timestamp passwordLastupdateTimestamp) {
+		this.passwordLastupdateTimestamp = passwordLastupdateTimestamp;
+	}
+
+	/**
+	 * @return the passwordExpiryDays
+	 */
+	public int getPasswordExpiryDays() {
+		return passwordExpiryDays;
+	}
+
+	/**
+	 * @param passwordExpiryDays the passwordExpiryDays to set
+	 */
+	public void setPasswordExpiryDays(int passwordExpiryDays) {
+		this.passwordExpiryDays = passwordExpiryDays;
+	}
 }

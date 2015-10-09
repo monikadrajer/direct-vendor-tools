@@ -88,9 +88,17 @@
   			{
   				if(sessionStorage.activateAccount == 'true')
   	  			{
-  	  				$("#accountActivateModel").modal('show');	
+  	  				$("#activateAlert").show();
+  	  				$("#expiredAlert").hide();
+  					$("#accountActivateModel").modal('show');	
   	  				setRegisterServicePage();
-  	  			}	
+  	  			}else if (sessionStorage.activateAccount == 'expired')
+  	  			{
+  	  				$("#activateAlert").hide();
+	  				$("#expiredAlert").show();
+					$("#accountActivateModel").modal('show');	
+	  				setRegisterServicePage();
+  	  			}
   			} 
   				
   			
@@ -197,7 +205,6 @@
   			{
   				setInteroperabilityServicesPage();
   			}
-  		  	 
   			
   			$('#contactUs').click(function(){
   			    $(location).attr('href', 'mailto:admin@sitenv.org');
@@ -210,6 +217,11 @@
   			{
   				window.location.href = APP_CONTEXT;
   				sessionStorage.activateAccount = true;
+  				return;
+  			}else
+  			{
+  				window.location.href = APP_CONTEXT;
+  				sessionStorage.activateAccount = "expired";
   				return;
   			}
   		}
@@ -365,9 +377,9 @@
 		</div>
 	</footer>
 
-	<div id="editProfileModel" class="modal fade" tabindex="-1"></div>
+	<div id="editProfileModel" class="modal fade" tabindex="-1" role="dialog"></div>
 	
-	<div id="changePwdModel" class="modal fade" tabindex="-1"></div>
+	<div id="changePwdModel" class="modal fade" tabindex="-1" role="dialog"></div>
 	
 	<div id="resetPwdModel" class="modal fade" tabindex="-1"></div>
 	
@@ -380,9 +392,13 @@
 				<h2 class="modal-title">Account Activation</h2>
 			</div>
 			<div class="modal-body">
-				<div class="alert alert-success alert-dismissible" role="alert"
-					 style="padding: 11px;" style="margin-bottom:30px;">
+				<div class="alert alert-success alert-dismissible" role="alert" id="activateAlert"
+					 style="padding: 11px;" style="margin-bottom:30px;" hidden="true">
 					Your account has been activated successfully, please login by using Login button.
+				</div>		
+				<div class="alert alert-danger alert-dismissible" role="alert" id="expiredAlert"
+					 style="padding: 11px;" style="margin-bottom:30px;" hidden="true">
+					Your activation link has been expired, please register again by using Sign Up button.
 				</div>		
 			</div>
 			<div class="modal-footer" style="margin-top: 0px;">

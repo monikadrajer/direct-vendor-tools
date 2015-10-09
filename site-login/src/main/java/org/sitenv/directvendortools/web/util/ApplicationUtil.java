@@ -1,5 +1,7 @@
 package org.sitenv.directvendortools.web.util;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.mail.Address;
@@ -12,6 +14,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+
 
 public class ApplicationUtil {
 	
@@ -51,9 +54,16 @@ public class ApplicationUtil {
 		}
 	}
 	
-	public String createTempPassword()
-	{
-		return "";
+	public static long getTimestampDifference(Timestamp timestamp) {
+		Timestamp currentTimestamp= new Timestamp(new Date().getTime());
+		return ((currentTimestamp.getTime() - timestamp.getTime())/ApplicationConstants.ONE_HOUR_TIME);
 	}
+	
+	public static int getPasswordExpiryDays(Timestamp timestamp) {
+		Timestamp currentTimestamp= new Timestamp(new Date().getTime());
+		Long diff= ((currentTimestamp.getTime() - timestamp.getTime())/ApplicationConstants.ONE_DAY_TIME);
+	    return diff.intValue();
+	}
+	
 
 }

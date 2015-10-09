@@ -106,6 +106,7 @@
 					<div class="col-lg-9">
 						<input type="text"
 							class="form-control" data-parsley-required data-parsley-type="email"
+							data-parsley-trigger="change"
 							name="emailAddress" id="emailAddress" />
 						<div class="infoArea"></div>
 					</div>
@@ -116,7 +117,7 @@
 					<div class="col-lg-9">
 						<input type="password" data-parsley-required data-parsley-minlength="8" data-parsley-maxlength="30" 
 							data-parsley-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_\W]).+$/"
-							data-parsley-error-message = "Password should be atleast 8 characters and
+							data-parsley-pattern-message = "Password should be atleast 8 characters and
 							must contain an Uppercase letter, Lowercase letter, digit, and special character"
 							class="form-control"
 							name="password" id="password" />

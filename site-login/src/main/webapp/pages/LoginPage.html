@@ -3,9 +3,9 @@
 var login = new Login();
 
 $(document).ready(function() {
+	
 	$('.alert .close').click(function() {
-
-		$(this).closest('.alert').hide();
+		 $(this).closest('.alert').hide();
 	});
 	
 	$("#loginForm").parsley({
@@ -34,9 +34,9 @@ $(document).ready(function() {
 function userLogin()
 {
 	var userLoginTO = new UserLoginTO();
-	userLoginTO.username =  $("#userName").val();
-	userLoginTO.password =  $("#password").val();
-	sessionStorage.username = $("#userName").val();
+	userLoginTO.username =  $("#loginUserName").val();
+	userLoginTO.password =  $("#loginPassword").val();
+	sessionStorage.username = $("#loginUserName").val();
 	var callbackFunction = $.Callbacks('once');
 	callbackFunction.add(loginSuccessHandler);
 	var httpService = new HttpAjaxServices();
@@ -47,11 +47,12 @@ function loginSuccessHandler(successJson)
 {
 	if(successJson != "")
     {
-   	 	if(successJson.tempPwd)
+   	 	if(successJson.tempPwd || successJson.passwordExpiryDays > 30)
    	 	{
    	 		$('#loginModel').removeClass('fade');
 	 		$('#loginModel').modal('hide');
    	 		openChangePwdPage();
+   	 		sessionStorage.passwordExpiryDays = successJson.passwordExpiryDays;
    	 	}
    	 	else
    	 	{
@@ -66,6 +67,7 @@ function loginSuccessHandler(successJson)
 			sessionStorage.companyName = UTILITY.htmlDecode(successJson.companyName);
 			sessionStorage.firstName = UTILITY.htmlDecode(successJson.firstName);
 			sessionStorage.lastName = UTILITY.htmlDecode(successJson.lastName);
+			sessionStorage.passwordExpiryDays = successJson.passwordExpiryDays;
 			UTILITY.populateName('nameId');
 			setRegisterServicePage();
    	 	}
@@ -100,10 +102,10 @@ function loginSuccessHandler(successJson)
 			
 			<form id="loginForm" method="post" class="form-horizontal">
 				<div class="form-group">
-					<label class="col-lg-3 control-label" for="userName">Email</label>
+					<label class="col-lg-3 control-label" for="loginUserName">Email</label>
 					<div class="col-lg-9">
 						<input type="text" class="form-control"
-							name="userName" id="userName" data-parsley-required
+							name="loginUserName" id="loginUserName" data-parsley-required
 							data-parsley-type="email"/>
 						<div class="infoArea"></div>
 					</div>
@@ -117,10 +119,10 @@ function loginSuccessHandler(successJson)
 				</div>
 
 				<div class="form-group">
-					<label class="col-lg-3 control-label" for="password">Password</label>
+					<label class="col-lg-3 control-label" for="loginPassword">Password</label>
 					<div class="col-lg-9">
 						<input type="password" class="form-control"
-							name="password" id="password" data-parsley-required
+							name="loginPassword" id="loginPassword" data-parsley-required
 							data-parsley-error-message="Password is Required"/>
 						<div class="infoArea"></div>
 					</div>

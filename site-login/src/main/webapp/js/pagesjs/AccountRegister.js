@@ -114,6 +114,7 @@ function AccountRegister()
 			sessionStorage.companyName = UTILITY.htmlDecode(successJson.companyName);
 			sessionStorage.firstName = UTILITY.htmlDecode(successJson.firstName);
 			sessionStorage.lastName = UTILITY.htmlDecode(successJson.lastName);
+			sessionStorage.passwordExpiryDays = successJson.passwordExpiryDays;
 			UTILITY.populateName('nameId');
 			setRegisterServicePage();
 		}

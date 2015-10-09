@@ -7,6 +7,7 @@ import org.sitenv.directvendortools.web.entities.DirectTransportTestingService;
 import org.sitenv.directvendortools.web.entities.User;
 import org.sitenv.directvendortools.web.services.DirectServicesService;
 import org.sitenv.directvendortools.web.services.UserService;
+import org.sitenv.directvendortools.web.util.ApplicationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -86,7 +87,7 @@ public class DirectServicesController {
 	
 	@RequestMapping(value = "/activateaccount", method = RequestMethod.GET)
 	public boolean activateAccount(@RequestParam(value = "username", required = false) String username) {
-		return userService.activateAccount(username)!= null ? true : false;
+		return userService.activateAccount(username);
 	}
 	
 	@RequestMapping(value = "/edituserdetails", method = RequestMethod.PUT)
@@ -99,6 +100,7 @@ public class DirectServicesController {
 		  userService.changePwd(user);
 		  User userDetails = this.userService.loadUserByUsername(user.getUsername());
 	      userDetails.setAuthToken(TokenUtils.createToken(userDetails));
+	      userDetails.setPasswordExpiryDays(ApplicationUtil.getPasswordExpiryDays(userDetails.getPasswordLastupdateTimestamp()));
 	      return userDetails;
 	}
 	
@@ -136,6 +138,7 @@ public class DirectServicesController {
 		 */
 		User userDetails = this.userService.loadUserByUsername(user.getUsername());
         userDetails.setAuthToken(TokenUtils.createToken(userDetails));
+        userDetails.setPasswordExpiryDays(ApplicationUtil.getPasswordExpiryDays(userDetails.getPasswordLastupdateTimestamp()));
 		return userDetails;
 	}
 }

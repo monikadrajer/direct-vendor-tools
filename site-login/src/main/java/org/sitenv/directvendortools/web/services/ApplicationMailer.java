@@ -50,6 +50,7 @@ public class ApplicationMailer
 		String mailText = "<div><p>Thank You for contacting Direct Vendor Tools.</p>" +
 				 "<p>Please activate your account on Direct Vendor Tools Application by using below mentioned URL</p>"  +
 				 "<p>"+activationLink +"</p></div>" +
+				 "<p>This link is valid for next 24 hours only.</p>"  +
 				 "<p>Note: This is an auto generated email, Please do not reply to this email. For any queries, please contact Direct Vendor Tools "
 				 + "support team by sending an email to testingservices@sitenv.org</p></div>" ;
 		message.setContent(mailText, "text/html");
