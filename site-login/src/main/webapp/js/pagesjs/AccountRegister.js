@@ -28,17 +28,17 @@ function AccountRegister()
 	
 	this.loadProfileDetails = function()
 	{
-		$("#company").val(UTILITY.htmlDecode(sessionStorage.companyName));
-		$("#firstName").val(UTILITY.htmlDecode(sessionStorage.firstName));
-		$("#lastName").val(UTILITY.htmlDecode(sessionStorage.lastName)); 
+		$("#editCompany").val(UTILITY.htmlDecode(sessionStorage.companyName));
+		$("#editFirstName").val(UTILITY.htmlDecode(sessionStorage.firstName));
+		$("#editLastName").val(UTILITY.htmlDecode(sessionStorage.lastName)); 
 	};
 	
 	this.updateProfile = function()
 	{
 		var accountRegisterTO = new AccountRegisterTO();
-		accountRegisterTO.companyName =  $("#company").val();
-		accountRegisterTO.firstName =  $("#firstName").val();
-		accountRegisterTO.lastName =  $("#lastName").val();
+		accountRegisterTO.companyName =  $("#editCompany").val();
+		accountRegisterTO.firstName =  $("#editFirstName").val();
+		accountRegisterTO.lastName =  $("#editLastName").val();
 		accountRegisterTO.username = sessionStorage.username;
 		
 		var callbackFunction = $.Callbacks('once');
