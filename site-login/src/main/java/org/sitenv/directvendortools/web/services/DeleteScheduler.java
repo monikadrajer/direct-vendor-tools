@@ -12,14 +12,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-/*@Service
-@EnableScheduling*/
+@Service
+@EnableScheduling
 public class DeleteScheduler {
 	
 	@Autowired
 	UserRepository userRepository;
 	
-	/*@Scheduled(fixedRate = (1000*60*60))*/
+	@Scheduled(fixedRate = (1000*60*60))
 	public void deleteUnactivatedUsers()
 	{
 		List<User> users = userRepository.findAll();

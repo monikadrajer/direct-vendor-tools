@@ -238,7 +238,7 @@
   		function setRegisterServicePageContent(data){
   			$('ul.navbar-nav li').removeClass('active');
   			$("#vendorRegLIId").addClass('active');
-			$("#mainPageContent").html(data);
+		    $("#mainPageContent").html(data);
   		}
   		
   		function setInteroperabilityServicesPage(){
@@ -293,6 +293,7 @@
   		function openEditProfilePage(){
   			$.get('pages/EditProfile.html',showEditProfilePage);
   		}
+  		
   		function showEditProfilePage(data){
   			$("#editProfileModel").html(data);
   			$("#editProfileModel").modal('show');
@@ -301,9 +302,20 @@
   		function openChangePwdPage(){
   			$.get('pages/ChangePassword.html',showChangePwdPage);
   		}
+  		
   		function showChangePwdPage(data){
   			$("#changePwdModel").html(data);
   			$("#changePwdModel").modal('show');
+  		}
+  		
+  		function openFAQPage(){
+  			$.get('pages/FAQ.html',showFAQPage);
+  		}
+  		
+  		function showFAQPage(data){
+  			$("#mainPageContent").html(data);
+  			$('ul.navbar-nav li').removeClass('active');
+  			$("#faqId").addClass('active');
   		}
  
 	</script>
@@ -326,14 +338,12 @@
 			<div id="navbar" class="navbar-collapse collapse in"
 				aria-expanded="true">
 				<ul class="nav navbar-nav">
-				<li>
+					<li>
 						<a href="http://sitenv.org/" style="text-decoration: none;">Home</a></li>
-				<li id="interopLIId"><a href="javascript:setInteroperabilityServicesPage()" style="text-decoration: none;" >Testing Services</a></li>
-				<li id="vendorRegLIId"><a href="javascript:setRegisterServicePage()" style="text-decoration: none;" >Developer Registration</a></li>
-				<li id="resetPwdLIId"><a href="javascript:openResetPasswordPage()" style="text-decoration: none;" >Reset Password</a></li>
-					
-					
-					
+					<li id="interopLIId"><a href="javascript:setInteroperabilityServicesPage()" style="text-decoration: none;" >Testing Services</a></li>
+					<li id="vendorRegLIId"><a href="javascript:setRegisterServicePage()" style="text-decoration: none;" >Developer Registration</a></li>
+					<li id="resetPwdLIId"><a href="javascript:openResetPasswordPage()" style="text-decoration: none;" >Reset Password</a></li>
+					<li id="faqId"><a href="javascript:openFAQPage()" style="text-decoration: none;" >FAQ</a></li>
 				</ul>
 				
 				<ul class="nav navbar-nav navbar-right" id="rightNavbarID">
